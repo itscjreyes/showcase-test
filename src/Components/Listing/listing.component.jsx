@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Card from '../Cards/cards.component';
 
 import './listing.styles.scss';
@@ -9,16 +8,14 @@ export class Listing extends Component {
     super();
 
     this.state = {
-      showcase: []
+      data: []
     }
   }
 
   componentDidMount() {
-    axios.get('https://crowdriff.com/wp-json/wp/v2/showcase/')
-      .then(res => this.setState({
-        showcase: res.data
-      }))
-      .catch(err => console.log(err))
+	fetch('https://crowdriff.com/wp-json/wp/v2/showcase')
+	.then(response => response.json())
+	.then(data => this.setState({data: data}))
   }
 
   render() {
@@ -27,7 +24,7 @@ export class Listing extends Component {
       <section className="listing-wrapper">
         <div className="container">
         {
-            this.state.showcase.map((card, i) => (
+            this.state.data.map((card, i) => (
                 <Card
                     key={i}
                     title={card.title.rendered}
