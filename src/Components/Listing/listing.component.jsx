@@ -13,7 +13,7 @@ export class Listing extends Component {
   }
 
   componentDidMount() {
-	fetch('https://crowdriff.com/wp-json/wp/v2/showcase')
+	fetch('https://crowdriffstg.wpengine.com/wp-json/wp/v2/showcase/?')
 	.then(response => response.json())
 	.then(data => this.setState({data: data}))
   }
@@ -29,7 +29,7 @@ export class Listing extends Component {
                     key={i}
                     title={card.title.rendered}
                     description={card.acf.description}
-                    image={card.acf.card_image}
+                    image={card.acf.image}
 					industry={card.acf.industry}
 					link={card.acf.link}
                 />
