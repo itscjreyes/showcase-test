@@ -4,6 +4,20 @@
     width: calc(25% - 22px);
     border: 1px solid lightgrey;
     margin: 10px;
+    transition: all 0.2s ease;
+
+    &:hover,
+    &:focus {
+        box-shadow: 0 10px 21px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .img-wrapper {
+        position: relative;
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+    }
 
     .content-wrapper {
         padding: 20px;
