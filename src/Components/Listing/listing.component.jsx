@@ -14,7 +14,7 @@ export const Listing = props => {
 						title={card.title.rendered}
 						description={card.acf.description}
 						image={card.acf.image}
-						industry={card.acf.industry}
+						content={card.acf.content}
 						link={card.acf.link}
 					/>
 				))

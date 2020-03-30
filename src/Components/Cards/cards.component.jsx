@@ -2,7 +2,7 @@ import React from 'react';
 
 import './cards.styles.scss';
 
-function Card({key, title, description, image, industry, link}) {
+function Card({key, title, description, image, content, link}) {
     
     const cardStyle = {
         backgroundImage: 'url(' + image + ')',
@@ -12,9 +12,14 @@ function Card({key, title, description, image, industry, link}) {
             <div className="img-wrapper" style={cardStyle}>
             </div>
             <div className="content-wrapper">
-                <span>{industry}</span>
-                <h3>{title}</h3>
-                <p>{description}</p>
+                <div className="title-description">
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                </div>
+                <div className="date-tag">
+                    <span className="date">March 30, 2020</span>
+                    <span className="tag">{content}</span>
+                </div>
             </div>
         </a>
     )

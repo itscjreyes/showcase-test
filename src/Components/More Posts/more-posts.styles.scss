@@ -1,0 +1,26 @@
+.btn-wrapper {
+    text-align: center;
+    padding-bottom: 125px;
+    background: #F9FCFD;
+}
+
+button.more-posts-btn {
+    text-align: center;
+    font-family: 'Source Sans Pro', 'Arial', sans-serif;
+    color: #10b5f5;
+    background: transparent;
+    border-radius: 5px;
+    border: 1px solid #10b5f5;
+    font-size: 20px;
+    outline: 0;
+    padding: 10px 25px;
+    transition: all 0.2s ease;
+
+    &:hover,
+    &:focus {
+        cursor: pointer;
+        background: #089AEF;
+        color: white;
+        border: 1px solid #089AEF;
+    }
+}

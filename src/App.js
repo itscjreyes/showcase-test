@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { IndustryFilter } from './Components/Filters/filter.industry.component';
-import { TypeFilter } from './Components/Filters/filter.type.component';
+import axios from 'axios';
+import { Banner } from './Components/Banner/banner.component';
+import { FiltersWrapper } from './Components/Filters Wrapper/filters-wrapper.component';
 import { Listing } from './Components/Listing/listing.component';
+import { MorePosts } from './Components/More Posts/more-posts.component';
+import { Footer } from './Components/Footer/footer.component';
 
 import './App.scss';
 
@@ -13,11 +16,13 @@ class App extends Component {
       data: [],
       type: '',
       industry: '',
-      isLoaded: false
+      isLoaded: false,
+      page: 1
     }
 
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleIndustryChange = this.handleIndustryChange.bind(this);
+    this.fetchPosts = this.fetchPosts.bind(this);
   }
 
   handleTypeChange(event) {
@@ -25,19 +30,26 @@ class App extends Component {
   }
 
   handleIndustryChange(event) {
-    this.setState({industry: event.target.value});
+    this.setState({
+      industry: event.target.value,
+      page: 1
+    });
+
+    this.fetchPosts();
+  }
+
+  fetchPosts() {
+    axios.get(`https://crowdriffstg.wpengine.com/wp-json/wp/v2/showcase?per_page=6&page=${this.state.page}`)
+      .then(res => this.setState((prevState) => ({
+          data: res.data,
+          isLoaded: true,
+          page: prevState.page + 1
+      })))
+      .catch(err => console.log(err))
   }
 
   componentDidMount() {
-		fetch('https://crowdriffstg.wpengine.com/wp-json/wp/v2/showcase')
-			.then(response => response.json())
-			.then(data => 
-				this.setState({
-					data: data,
-					isLoaded: true
-				})
-			)
-			.catch(err => console.log(err))
+    this.fetchPosts();
 	}
 
   render() {
@@ -45,29 +57,23 @@ class App extends Component {
 
     let filteredData = data.slice();
     if (type) {
-      filteredData = filteredData.filter(item => item.acf.type.includes(type))
+      filteredData = filteredData.filter(item => item.acf.content.includes(type))
     }
     if (industry) {
       filteredData = filteredData.filter(item => item.acf.industry.includes(industry))
     }
 
-    console.log(filteredData)
+    console.log(this.state)
 
     return (
       <div className="App">
-        <div className="container">
-          <h1>Industry Showcase</h1>
-          <div className="filters">
-            {/* <TypeFilter
-              value={type}
-              handleChange={this.handleTypeChange}
-            /> */}
-            <IndustryFilter
-              value={industry}
-              handleChange={this.handleIndustryChange}
-            />
-          </div>
-        </div>
+        <Banner />
+        <FiltersWrapper
+          type={type}
+          industry={industry}
+          handleTypeChange={this.handleTypeChange}
+          handleIndustryChange={this.handleIndustryChange}
+        />
         { filteredData.length > 0 &&
           <Listing 
             data={filteredData}
@@ -81,6 +87,10 @@ class App extends Component {
             </div>
           </section>
         }
+        <MorePosts
+          handleClick={this.fetchPosts}
+        />
+        <Footer />
       </div>
     )
   }
