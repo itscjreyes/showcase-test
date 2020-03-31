@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Banner } from './Components/Banner/banner.component';
 import { FiltersWrapper } from './Components/Filters Wrapper/filters-wrapper.component';
+import { Loader } from './Components/Loader/loader.component';
 import { Listing } from './Components/Listing/listing.component';
 import { MorePosts } from './Components/More Posts/more-posts.component';
+import { NoResults } from './Components/No Results/no-results.component';
 import { Footer } from './Components/Footer/footer.component';
 
 import './App.scss';
@@ -17,35 +19,46 @@ class App extends Component {
       type: '',
       industry: '',
       isLoaded: false,
-      page: 1
+      pageSize: 4
     }
 
     this.handleTypeChange = this.handleTypeChange.bind(this);
     this.handleIndustryChange = this.handleIndustryChange.bind(this);
+    this.handleMorePosts = this.handleMorePosts.bind(this);
     this.fetchPosts = this.fetchPosts.bind(this);
   }
 
   handleTypeChange(event) {
-    this.setState({type: event.target.value});
+    this.setState({
+      type: event.value,
+      pageSize: 4
+    });
   }
 
   handleIndustryChange(event) {
     this.setState({
-      industry: event.target.value,
-      page: 1
+      industry: event.value,
+      pageSize: 4
     });
+  }
 
-    this.fetchPosts();
+  handleMorePosts() {
+    this.setState((prevState) => ({
+      pageSize: prevState.pageSize + 4
+    }))
   }
 
   fetchPosts() {
-    axios.get(`https://crowdriffstg.wpengine.com/wp-json/wp/v2/showcase?per_page=6&page=${this.state.page}`)
-      .then(res => this.setState((prevState) => ({
+    axios.get(`https://crowdriffstg.wpengine.com/wp-json/wp/v2/showcase/`)
+      .then(res => this.setState({
           data: res.data,
-          isLoaded: true,
-          page: prevState.page + 1
-      })))
+          isLoaded: true
+      }))
       .catch(err => console.log(err))
+  }
+
+  sortData() {
+    this.state.data.sort((a,b) => parseFloat(b.acf.date) - parseFloat(a.acf.date))
   }
 
   componentDidMount() {
@@ -53,7 +66,10 @@ class App extends Component {
 	}
 
   render() {
-    const { data, type, industry, isLoaded } = this.state;
+    const { data, type, industry, isLoaded, pageSize } = this.state;
+
+    this.sortData();
+    console.log(data)
 
     let filteredData = data.slice();
     if (type) {
@@ -63,7 +79,7 @@ class App extends Component {
       filteredData = filteredData.filter(item => item.acf.industry.includes(industry))
     }
 
-    console.log(this.state)
+    // console.log(this.state)
 
     return (
       <div className="App">
@@ -74,22 +90,23 @@ class App extends Component {
           handleTypeChange={this.handleTypeChange}
           handleIndustryChange={this.handleIndustryChange}
         />
-        { filteredData.length > 0 &&
-          <Listing 
-            data={filteredData}
-            count={filteredData.length}
-          />
+        { !isLoaded &&
+          <Loader />
         }
-        { filteredData.length == 0 && isLoaded &&
-          <section className="no-results">
-            <div className="container">
-              <h2>Sorry, there are no matches. Please try again.</h2>
+        { filteredData.length > 0 && isLoaded ?
+          (
+            <div>
+              <Listing 
+                data={filteredData}
+                size={pageSize}
+              />
+              <MorePosts
+                handleClick={this.handleMorePosts}
+              />
             </div>
-          </section>
+          ) :
+          (<NoResults />)
         }
-        <MorePosts
-          handleClick={this.fetchPosts}
-        />
         <Footer />
       </div>
     )

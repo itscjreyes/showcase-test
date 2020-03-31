@@ -4,11 +4,12 @@ import Card from '../Cards/cards.component';
 import './listing.styles.scss';
 
 export const Listing = props => {
+	console.log(props.size)
 	return (
 		<section className="listing-wrapper">
 			<div className="container">
 			{
-				props.data.map((card, i) => (
+				props.data.slice(0, props.size).map((card, i) => (
 					<Card
 						key={i}
 						title={card.title.rendered}

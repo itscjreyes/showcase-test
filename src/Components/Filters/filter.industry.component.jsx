@@ -1,13 +1,31 @@
 import React from 'react';
+import Select from 'react-select';
 import './filters.styles.scss';
 
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: state.isSelected || state.isFocused ? '#10b5f5' : '#77848A',
+        background: state.isSelected || state.isFocused ? '#E7F8FE' : 'transparent',
+        padding: '15px'
+    })
+}
+
+const options = [
+    { value: '', label: 'All Industries'},
+    { value: 'Destinations', label: 'Destinations'},
+    { value: 'Attractions & Museums', label: 'Attractions & Museums'},
+]
+
 export const IndustryFilter = ({industry, handleChange}) => (
-    <div className="fiter-select">
-        <label htmlFor="industry-filter">Industry</label>
-        <select value={industry} onChange={handleChange} name="industry-filter">
-            <option value="">All</option>
-            <option value="Destinations">Destinations</option>
-            <option value="Attractions & Museums">Attractions & Museums</option>
-        </select>
+    <div className="filter-select industry">
+        <Select 
+            value={industry} 
+            options={options} 
+            onChange={handleChange}
+            isSearchable={false}
+            styles={customStyles}
+            placeholder={'Industry'}
+        />
     </div>
 )

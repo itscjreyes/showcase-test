@@ -1,3 +1,69 @@
-.filters {
-    background: #F9FCFD;
+.filter-select {
+    display: inline-block;
+
+    &.type {
+        width: 150px;
+        margin-right: 30px;
+    }
+
+    &.industry {
+        width: 230px;
+    }
+    
+    .css-yk16xz-control,
+    .css-1pahdxg-control,
+    .css-1pahdxg-control:hover {
+        border-radius: 30px;
+        background: transparent;
+        padding: 0 10px;
+        border: 1px solid #10b5f5;
+        box-shadow: none;
+        color: #10b5f5;
+    }
+
+    .css-1wa3eu0-placeholder,
+    .css-1uccc91-singleValue {
+        color: #10b5f5;
+    }
+
+    .css-6q0nyr-Svg {
+        fill: #10b5f5;
+    }
+
+    .css-1okebmr-indicatorSeparator {
+        display: none;
+    }
+
+    .css-26l3qy-menu {
+        background: white;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+
+        > div {
+            padding: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .filter-select {
+        &.type {
+            margin: 0 20px 20px 0;
+            width: 120px;
+        }
+
+        &.industry {
+            width: 200px;
+        }
+
+        .css-yk16xz-control,
+        .css-1pahdxg-control,
+        .css-1pahdxg-control:hover {
+            border-radius: 30px;
+            background: transparent;
+            padding: 5px 10px;
+            border: 1px solid #10b5f5;
+            box-shadow: none;
+            color: #10b5f5;
+        }
+    }
 }
